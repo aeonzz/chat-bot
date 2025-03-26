@@ -30,7 +30,7 @@ export default function PopupChat() {
     setContent,
     onSubmit,
   } = useChat({
-    apiUrl: "https://chatbot-dev-api.supportzebra.net/api/ask",
+    apiUrl: import.meta.env.VITE_API_URL,
     errorMessage: "Sorry, something went wrong.",
   });
 

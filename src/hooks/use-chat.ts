@@ -33,12 +33,7 @@ export function useChat(options: UseChatOptions) {
   const [isLoading, setIsLoading] = React.useState(false);
   const [content, setContent] = React.useState<string>("");
   const [messages, setMessages] = React.useState<Message[]>([]);
-  const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const chatBoxRef = React.useRef<HTMLTextAreaElement>(null);
-
-  React.useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isLoading]);
 
   async function onSubmit(content: string) {
     if (!content.trim()) return;
@@ -66,7 +61,6 @@ export function useChat(options: UseChatOptions) {
           headers: {},
         }
       );
-
       const assistantMessage: Message = {
         role: "assistant",
         content: response.data.answer,
@@ -104,7 +98,6 @@ export function useChat(options: UseChatOptions) {
     isLoading,
     content,
     messages,
-    messagesEndRef,
     chatBoxRef,
     setContent,
     onSubmit,

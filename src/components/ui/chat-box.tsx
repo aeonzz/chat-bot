@@ -41,7 +41,7 @@ export default function ChatBox({
       />
       <Button
         size="icon"
-        className="size-11 cursor-pointer"
+        className="size-11 cursor-pointer rounded-lg"
         disabled={isLoading || !content.trim()}
         onClick={() => {
           onSubmit(content);

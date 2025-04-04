@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Bot, X } from "lucide-react";
 import ChatBox from "@/components/ui/chat-box";
 import { useChat } from "@/hooks/use-chat";
@@ -12,27 +12,20 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-const topics = [
-  "Code of Discipline",
-  "DTR Violations",
-  "Leave Filing",
-  "Memorandums",
-];
+const topics = ["Code of Discipline", "DTR Violations", "Leave Filing"];
 
 export default function PopupChat() {
+  const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const [open, setOpen] = React.useState(false);
-  const {
-    isLoading,
-    content,
-    messages,
-    messagesEndRef,
-    chatBoxRef,
-    setContent,
-    onSubmit,
-  } = useChat({
-    apiUrl: import.meta.env.VITE_API_URL,
-    errorMessage: "Sorry, something went wrong.",
-  });
+  const { isLoading, content, messages, chatBoxRef, setContent, onSubmit } =
+    useChat({
+      apiUrl: import.meta.env.VITE_API_URL,
+      errorMessage: "Sorry, something went wrong.",
+    });
+
+  React.useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isLoading]);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -42,17 +35,18 @@ export default function PopupChat() {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          size="icon"
-          className="absolute right-4 bottom-4 size-10 rounded-full"
-        >
-          <Bot />
-        </Button>
+      <PopoverTrigger
+        className={cn(
+          buttonVariants({ variant: "default", size: "icon" }),
+          "fixed right-4 bottom-4 size-10 rounded-[99px]"
+        )}
+      >
+        <Bot />
       </PopoverTrigger>
       <PopoverContent
         collisionPadding={20}
-        className="flex h-[553px] w-[449px] flex-col p-0"
+        className="flex h-[533px] w-[429px] flex-col p-0"
+        side="left"
       >
         <div className="bg-primary relative flex h-[48px] w-full items-center justify-between rounded-t-xl px-4 py-[12px]">
           <img
@@ -62,15 +56,15 @@ export default function PopupChat() {
                 : "/papaz-handsup.svg"
             }
             alt="Papa Z Image"
-            className="absolute -bottom-2 -left-9"
+            className="absolute -bottom-1.5 -left-5 size-[120px]"
           />
-          <h4 className="text-primary-foreground text-4 ml-20 leading-[24px] font-semibold tracking-normal">
+          <h4 className="text-4 ml-20 leading-[24px] font-semibold tracking-normal text-white">
             Papa Z’s here to help
           </h4>
           <Button
             variant="default"
             size="icon"
-            className="size-6 border-2 bg-transparent"
+            className="size-6 rounded-md border-2 bg-transparent"
             onClick={() => setOpen((prev) => !prev)}
           >
             <X className="text-primary-foreground" />
@@ -134,6 +128,7 @@ export default function PopupChat() {
                   : "/papaz-holdingmic.svg"
               }
               alt="Papa Z Image"
+              className="size-[120px]"
             />
             <div>
               <h5 className="text-secondary-foreground text-[16px] leading-5 font-medium">
@@ -150,8 +145,13 @@ export default function PopupChat() {
                 <Badge
                   key={index}
                   variant="secondary"
-                  className="hover:ring-ring cursor-pointer leading-5 font-normal hover:ring-1"
-                  onClick={() => setContent(topic)}
+                  aria-disabled={isLoading}
+                  className="hover:ring-ring cursor-pointer leading-5 font-normal hover:ring-1 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
+                  onClick={() => {
+                    if (isLoading) return;
+                    setContent(topic);
+                    onSubmit(topic);
+                  }}
                 >
                   {topic}
                 </Badge>

@@ -6,6 +6,7 @@ export type Response = {
     answer: string;
     sources: string[];
     document_types: string[];
+    suggestion: string[];
   };
 };
 
@@ -18,6 +19,7 @@ export type Message = {
   content: string;
   sources: string[];
   fileType: string[];
+  suggestion: string[];
   error: boolean;
 };
 
@@ -43,6 +45,7 @@ export function useChat(options: UseChatOptions) {
       content,
       fileType: [],
       sources: [],
+      suggestion: [],
       error: false,
     };
     setMessages((prev) => [...prev, newMessage]);
@@ -66,6 +69,7 @@ export function useChat(options: UseChatOptions) {
         content: response.data.answer,
         sources: response.data.sources,
         fileType: response.data.document_types,
+        suggestion: response.data.suggestion,
         error: false,
       };
       setMessages((prev) => [...prev, assistantMessage]);
@@ -78,6 +82,7 @@ export function useChat(options: UseChatOptions) {
           content: errorMessage,
           sources: [],
           fileType: [],
+          suggestion: [],
           error: true,
         },
       ]);

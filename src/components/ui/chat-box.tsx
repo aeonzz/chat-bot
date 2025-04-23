@@ -35,8 +35,11 @@ export default function ChatBox({
         }}
         autoFocus
         disabled={isLoading}
-        className="field-sizing-content max-h-21 min-h-0 resize-none px-4 py-3 text-[14px] leading-5 font-normal"
+        className="field-sizing-content max-h-21 min-h-0 !resize-none px-4 py-3 text-[14px] leading-5 font-normal"
         placeholder="Ask me anything...."
+        style={{
+          resize: "none",
+        }}
         ref={ref}
       />
       <Button

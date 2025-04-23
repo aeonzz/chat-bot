@@ -81,7 +81,7 @@ export default function PopupChat() {
                 <div
                   key={i}
                   className={cn(
-                    "mb-5 flex",
+                    "flex",
                     msg.role === "user" ? "justify-end" : "justify-start"
                   )}
                 >
